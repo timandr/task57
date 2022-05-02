@@ -109,7 +109,9 @@ public class App {
                     e.printStackTrace();
                 }
             }
+
             System.out.println(Thread.currentThread().getName() + " finished.");
+            
             synchronized(_queue)
             {
                 _queue.notifyAll();
@@ -132,7 +134,6 @@ public class App {
 
         Thread consThread1 = new Thread(new Consumer(queue, totalhandledElements), "Consumer 1");
         Thread consThread2 = new Thread(new Consumer(queue, totalhandledElements), "Consumer 2");
-        // Thread consThread3 = new Thread(new Consumer(queue, totalhandledElements), "Consumer 3");
 
         try
         {
@@ -157,7 +158,6 @@ public class App {
 
             consThread1.join();
             consThread2.join();
-            // consThread3.join();
         } 
         catch(InterruptedException | IllegalMonitorStateException e)
         {
