@@ -15,7 +15,7 @@ import java.util.concurrent.*;
 
 public class App {
 
-    static final int maxHandledElements = 10_000;
+    static final int maxHandledElements = 10000;
 
     /**
      * @brief Producer 
@@ -43,7 +43,7 @@ public class App {
                     {
                         synchronized(_queue)
                         {
-                            System.out.println("Elements: " + _totalhandledElements.get() + ". " + Thread.currentThread().getName() + " is sleeping...");
+                            System.out.println(Thread.currentThread().getName() + " is sleeping... " + "(Handled: " + _totalhandledElements.get() + ")");
                             _queue.wait();
                         }        
                     }
@@ -98,8 +98,10 @@ public class App {
                     else
                     {
                         _queue.take();
-
-                        _totalhandledElements.incrementAndGet();
+                        if(_totalhandledElements.get() < maxHandledElements)
+                        {
+                            _totalhandledElements.incrementAndGet();
+                        }
                     }
                 }
                 catch (InterruptedException e) 
@@ -108,6 +110,10 @@ public class App {
                 }
             }
             System.out.println(Thread.currentThread().getName() + " finished.");
+            synchronized(_queue)
+            {
+                _queue.notifyAll();
+            }
         }
     }
 
@@ -132,7 +138,7 @@ public class App {
         {
             prodThread1.start();
             prodThread2.start();
-            // prodThread3.start();
+            prodThread3.start();
     
             consThread1.start();
             consThread2.start();
@@ -147,7 +153,7 @@ public class App {
         try {
             prodThread1.join();
             prodThread2.join();
-            // prodThread3.join();
+            prodThread3.join();
 
             consThread1.join();
             consThread2.join();
