@@ -143,7 +143,6 @@ public class App {
     
             consThread1.start();
             consThread2.start();
-            // consThread3.start();
         }
         catch (NullPointerException e)
         {
